@@ -30,23 +30,23 @@ from Model.parameterdatasourse import ParameterDataSourse
 from Model.parameterlimit import ParameterLimit
 from Model.parametervalue import ParameterValue
 from Model.directory import Directory
-from Model.directoryvalue import DirectoryValuе
+from Model.directoryvalue import DirectoryValue
 
 
 @strawberry.type
 class Query:
 
-    @strawberry.field
-    def hello(self) -> str:
-        return "Hello World!"
+    # @strawberry.field
+    # def hello(self) -> str:
+    #     return "Hello World!"
 
     @strawberry.field
     # async def get_all_parameters(self) -> List[ParameterType]:
     #     return await ParameterService.get_all()
-    async def get_all_parameters(self, name_parameter: Optional[str] = None, id_physical_type: Optional[int] = None,
-                                 moment_begin: Optional[datetime] = None, moment_end: Optional[datetime] = None,
-                                 id_place_izmer: Optional[int] = None, id_sreda_izmer: Optional[int] = None,
-                                 id_units: Optional[int] = None) -> \
+    async def Parameters(self, name_parameter: Optional[str] = None, id_physical_type: Optional[int] = None,
+                         moment_begin: Optional[datetime] = None, moment_end: Optional[datetime] = None,
+                         id_place_izmer: Optional[int] = None, id_sreda_izmer: Optional[int] = None,
+                         id_units: Optional[int] = None) -> \
             List[ParameterType]:
         async with db as session:
             query = select(Parameter)
@@ -86,11 +86,11 @@ class Query:
         return await ParameterService.get_by_id(id_parameter)
 
     @strawberry.field
-    async def get_all_parameterdatasourses(self, id_parameter: Optional[int] = None,
-                                           id_data_sourse: Optional[int] = None,
-                                           data_sourse_key: Optional[str] = None,
-                                           moment_begin: Optional[datetime] = None,
-                                           moment_end: Optional[datetime] = None) -> \
+    async def ParameterDatasourses(self, id_parameter: Optional[int] = None,
+                                   id_data_sourse: Optional[int] = None,
+                                   data_sourse_key: Optional[str] = None,
+                                   moment_begin: Optional[datetime] = None,
+                                   moment_end: Optional[datetime] = None) -> \
             List[ParameterDataSourseType]:
         async with db as session:
             query = select(ParameterDataSourse)
@@ -126,12 +126,12 @@ class Query:
         return await ParameterDataSourseService.get_by_id(id_parameterdatasourse)
 
     @strawberry.field
-    async def get_all_parameterlimits(self, id_parameter: Optional[int] = None,
-                                      id_limit_type: Optional[int] = None,
-                                      min_limit: Optional[int] = None,
-                                      max_limit: Optional[int] = None,
-                                      moment_begin: Optional[datetime] = None,
-                                      moment_end: Optional[datetime] = None) -> \
+    async def ParameterLimits(self, id_parameter: Optional[int] = None,
+                              id_limit_type: Optional[int] = None,
+                              min_limit: Optional[int] = None,
+                              max_limit: Optional[int] = None,
+                              moment_begin: Optional[datetime] = None,
+                              moment_end: Optional[datetime] = None) -> \
             List[ParameterLimitType]:
         async with db as session:
             query = select(ParameterLimit)
@@ -171,8 +171,8 @@ class Query:
         return await ParameterLimitService.get_by_id(id_parameterlimit)
 
     @strawberry.field
-    async def get_all_parametervalues(self, moment_change: Optional[datetime] = None,
-                                      value: Optional[int] = None) -> \
+    async def ParameterValues(self, moment_change: Optional[datetime] = None,
+                              value: Optional[int] = None) -> \
             List[ParameterValueType]:
         async with db as session:
             query = select(ParameterValue)
@@ -195,9 +195,9 @@ class Query:
         return await ParameterValueService.get_by_id(id_parameterdatasourse)
 
     @strawberry.field
-    async def get_all_directorys(self, name_directory: Optional[str] = None,
-                                 moment_begin: Optional[datetime] = None,
-                                 moment_end: Optional[datetime] = None) -> \
+    async def Directorys(self, name_directory: Optional[str] = None,
+                         moment_begin: Optional[datetime] = None,
+                         moment_end: Optional[datetime] = None) -> \
             List[DirectoryType]:
         async with db as session:
             query = select(Directory)
@@ -223,11 +223,11 @@ class Query:
         return await DirectoryService.get_by_id(id_directory)
 
     @strawberry.field
-    async def get_all_directoryvalues(self, id_directory: Optional[int] = None,
-                                      long_name: Optional[str] = None,
-                                      short_name: Optional[str] = None,
-                                      moment_begin: Optional[datetime] = None,
-                                      moment_end: Optional[datetime] = None) -> \
+    async def DirectoryValues(self, id_directory: Optional[int] = None,
+                              long_name: Optional[str] = None,
+                              short_name: Optional[str] = None,
+                              moment_begin: Optional[datetime] = None,
+                              moment_end: Optional[datetime] = None) -> \
             List[DirectoryValueType]:
         async with db as session:
             query = select(DirectoryValue)

@@ -18,7 +18,6 @@ class Parameter(Base):
     id_place_izmer: int = Column(Integer)
     id_sreda_izmer: int = Column(Integer)
     id_units: int = Column(Integer)
-    Parameterdatasourses: List[ParameterDataSourseType] = []#тест
 
 
 #

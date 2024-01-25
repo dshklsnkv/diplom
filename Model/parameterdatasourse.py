@@ -2,7 +2,6 @@ from datetime import datetime
 from typing import List, Optional
 from sqlalchemy import Column, Integer, String, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
-from schema import ParameterValueType
 
 
 Base = declarative_base()
@@ -17,5 +16,4 @@ class ParameterDataSourse(Base):
     data_sourse_key: str = Column(String)
     moment_begin: datetime = Column(TIMESTAMP)
     moment_end: datetime = Column(TIMESTAMP)
-    # Parametervalues: List[ParameterValueType] = [] #тест
 

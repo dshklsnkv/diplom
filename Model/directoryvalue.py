@@ -3,6 +3,7 @@ from typing import Optional
 from sqlalchemy import Column, Integer, String, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 
+
 Base = declarative_base()
 
 
