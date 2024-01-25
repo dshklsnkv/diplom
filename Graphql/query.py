@@ -30,7 +30,7 @@ from Model.parameterdatasourse import ParameterDataSourse
 from Model.parameterlimit import ParameterLimit
 from Model.parametervalue import ParameterValue
 from Model.directory import Directory
-from Model.directoryvalue import DirectoryValue
+from Model.directoryvalue import DirectoryValuе
 
 
 @strawberry.type
