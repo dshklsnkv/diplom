@@ -1,7 +1,25 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 import strawberry
+
+
+@strawberry.type
+class ParameterValueType:
+    id_parameterdatasourse: Optional[int]
+    moment_change: Optional[datetime]
+    value: int
+
+
+@strawberry.type
+class ParameterDataSourseType:
+    id_parameterdatasourse: Optional[int]
+    id_parameter: int
+    id_data_sourse: int
+    data_sourse_key: str
+    moment_begin: datetime
+    moment_end: datetime
+    # Parametervalues: List[ParameterValueType] #тест
 
 
 @strawberry.type
@@ -14,6 +32,9 @@ class ParameterType:
     id_place_izmer: int
     id_sreda_izmer: int
     id_units: int
+    # Parameterdatasourses: List[ParameterDataSourseType]
+    # Parameterdatasourses: List[ParameterDataSourseType] = strawberry.field(resolver=get_all_parameterdatasourses)
+    # #тест
 
 
 @strawberry.input
@@ -26,16 +47,6 @@ class ParameterInput:
     id_place_izmer: int
     id_sreda_izmer: int
     id_units: int
-
-
-@strawberry.type
-class ParameterDataSourseType:
-    id_parameterdatasourse: Optional[int]
-    id_parameter: int
-    id_data_sourse: int
-    data_sourse_key: str
-    moment_begin: datetime
-    moment_end: datetime
 
 
 @strawberry.input
@@ -68,13 +79,6 @@ class ParameterLimitInput:
     max_limit: int
     moment_begin: datetime
     moment_end: datetime
-
-
-@strawberry.type
-class ParameterValueType:
-    id_parameterdatasourse: Optional[int]
-    moment_change: Optional[datetime]
-    value: int
 
 
 @strawberry.input

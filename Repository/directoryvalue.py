@@ -46,8 +46,7 @@ class DirectoryValueRepository:
             #     "name_parameter": "123",  "id_place_izmer": 11}).execution_options(synchronize_session="fetch")
             query = sql_update(DirectoryValue).where(DirectoryValue.id_directoryvalue == directoryvalue_id).values(
                 # **parameter.dict()).execution_options(synchronize_session="fetch")
-
-                id_directoryvalue=directoryvalue.id_directoryvalue,
+                id_directory=directoryvalue.id_directory,
                 long_name=directoryvalue.long_name,
                 short_name=directoryvalue.short_name,
                 moment_begin=directoryvalue.moment_begin,

@@ -29,8 +29,8 @@ class ParameterValueService:
     async def get_all():
         list_parametervalue = await ParameterValueRepository.get_all_parametervalues()
         return [ParameterValueType(id_parameterdatasourse=parametervalue.id_parameterdatasourse,
-                                  moment_change=parametervalue.moment_change,
-                                  value=parametervalue.value) for parametervalue in
+                                   moment_change=parametervalue.moment_change,
+                                   value=parametervalue.value) for parametervalue in
                 list_parametervalue]
 
     @staticmethod
