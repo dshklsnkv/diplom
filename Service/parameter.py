@@ -3,9 +3,32 @@ from datetime import datetime
 from Model.parameter import Parameter
 from Repository.parameter import ParameterRepository
 from schema import ParameterInput, ParameterType
+from typing import List, Optional
 
 
 class ParameterService:
+
+    # Получить Параметры с возможностью фильтрации данных
+    @staticmethod
+    async def getParameters(
+            root,
+            idParameter: Optional[List[int]] = None,
+            nameParameter: Optional[str] = None,
+            idPhysicalType: Optional[List[int]] = None,
+            idPlaceIzmer: Optional[List[int]] = None,
+            idSredaIzmer: Optional[List[int]] = None,
+            idUnits: Optional[List[int]] = None
+    ):
+        # Пока тут просто получение данных через репозиторий
+        # В дальнейшем тут может добавиться какая-то дополнительная логика
+        return await ParameterRepository.getParameters(
+            idParameter=idParameter,
+            nameParameter=nameParameter,
+            idPhysicalType=idPhysicalType,
+            idPlaceIzmer=idPlaceIzmer,
+            idSredaIzmer=idSredaIzmer,
+            idUnits=idUnits
+        )
 
     @staticmethod
     async def add_parameter(parameter_data: ParameterInput):
@@ -64,5 +87,3 @@ class ParameterService:
         await ParameterRepository.update(parameter_id, parameter)
 
         return f'Successfully updated data by id {parameter_id}'
-
-

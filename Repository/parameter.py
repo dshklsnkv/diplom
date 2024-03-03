@@ -3,9 +3,41 @@ from Model.parameter import Parameter
 from config import db
 from sqlalchemy.sql import select
 from sqlalchemy import update as sql_update, delete as sql_delete
+from typing import List, Optional
 
 
 class ParameterRepository:
+
+    # Запрос параметров
+    @staticmethod
+    async def getParameters(
+            idParameter: Optional[List[int]] = None,
+            nameParameter: Optional[str] = None,
+            idPhysicalType: Optional[List[int]] = None,
+            idPlaceIzmer: Optional[List[int]] = None,
+            idSredaIzmer: Optional[List[int]] = None,
+            idUnits: Optional[List[int]] = None
+    ):
+        async with db as session:
+            query = select(Parameter)
+            # фильтры накладываются на данном уровне
+            # для тестовых полей использовать like или ilike (регистронезависимое сравнение) вместо ==
+            # Маска поиска задается на уровне клиента
+            # Для идентификаторов использовать списки и конструкцию "in", что бы можно было пачкой запрашивать
+            if idParameter:
+                query = query.filter(Parameter.id_parameter.in_(idParameter))
+            if nameParameter:
+                query = query.filter(Parameter.name_parameter.like(nameParameter))
+            if idPhysicalType:
+                query = query.filter(Parameter.id_physical_type.in_(idPhysicalType))
+            if idPlaceIzmer:
+                query = query.filter(Parameter.id_place_izmer.in_(idPlaceIzmer))
+            if idSredaIzmer:
+                query = query.filter(Parameter.id_sreda_izmer.in_(idSredaIzmer))
+            if idUnits:
+                query = query.filter(Parameter.id_units.in_(idUnits))
+            result = await session.execute(query)
+            return result.scalars().all()
 
     @staticmethod
     async def create(parameter_data: Parameter):

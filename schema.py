@@ -27,10 +27,29 @@ class ParameterType:
     name_parameter: str
     moment_begin: datetime
     moment_end: datetime
-    id_physical_type: int
-    id_place_izmer: int
-    id_sreda_izmer: int
-    id_units: int
+    id_physical_type: Optional[int]
+    id_place_izmer: Optional[int]
+    id_sreda_izmer: Optional[int]
+    id_units: Optional[int]
+
+    # Вот так описываются Поля-Типы (вложенные сущности / иерархия)
+    # Атрибут описывается как Функция, возвращающая сущность или список сущностей
+    @strawberry.field(description="Источники данных")
+    async def data_sourse(
+            self,
+            idDataSourse: Optional[List[int]] = None,
+            dataSourseKey: Optional[str] = None
+    ) -> List[ParameterDataSourseType]:
+        from Resolver.parameterdatasourse import ParameterDataSourseResolver
+        parentId = []
+        parentId.append(self.id_parameter)
+        # Вызываем резолвер. В параметр резолвера передаем ключ от родителя (self.id_parameter)
+        return await ParameterDataSourseResolver.getParamDataSourses(
+            self=self,
+            idParameter=parentId,
+            idDataSourse=idDataSourse,
+            dataSourseKey=dataSourseKey
+        )
 
 
 @strawberry.input

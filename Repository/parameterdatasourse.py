@@ -3,9 +3,31 @@ from Model.parameterdatasourse import ParameterDataSourse
 from config import db
 from sqlalchemy.sql import select
 from sqlalchemy import update as sql_update, delete as sql_delete
+from typing import List, Optional
 
 
 class ParameterDataSourseRepository:
+
+    # Запрос источников данных параметра(ов)
+    @staticmethod
+    async def getParameterDataSourses(
+            idParameterDataSourse: Optional[List[int]] = None,
+            idParameter: Optional[List[int]] = None,
+            idDataSourse: Optional[List[int]] = None,
+            dataSourseKey: Optional[str] = None
+    ):
+        async with db as session:
+            query = select(ParameterDataSourse)
+            if idParameterDataSourse:
+                query = query.filter(ParameterDataSourse.id_parameterdatasourse.in_(idParameterDataSourse))
+            if idParameter:
+                query = query.filter(ParameterDataSourse.id_parameter.in_(idParameter))
+            if idDataSourse:
+                query = query.filter(ParameterDataSourse.id_data_sourse.in_(idDataSourse))
+            if dataSourseKey:
+                query = query.filter(ParameterDataSourse.data_sourse_key.ilike(dataSourseKey))
+            result = await session.execute(query)
+            return result.scalars().all()
 
     @staticmethod
     async def create(parameterdatasourse_data: ParameterDataSourse):
