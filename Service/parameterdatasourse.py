@@ -3,9 +3,25 @@ from datetime import datetime
 from Model.parameterdatasourse import ParameterDataSourse
 from Repository.parameterdatasourse import ParameterDataSourseRepository
 from schema import ParameterDataSourseInput, ParameterDataSourseType
+from typing import Optional, List
 
 
 class ParameterDataSourseService:
+
+    @staticmethod
+    async def getParameterDataSourses(
+            self,
+            idParameterDataSourse: Optional[List[int]] = None,
+            idParameter: Optional[List[int]] = None,
+            idDataSourse: Optional[List[int]] = None,
+            dataSourseKey: Optional[str] = None
+    ):
+        return await ParameterDataSourseRepository.getParameterDataSourses(
+            idParameterDataSourse,
+            idParameter,
+            idDataSourse,
+            dataSourseKey
+        )
 
     @staticmethod
     async def add_parameterdatasourse(parameterdatasourse_data: ParameterDataSourseInput):

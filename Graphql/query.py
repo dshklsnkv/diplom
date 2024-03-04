@@ -3,9 +3,11 @@ from typing import List
 import strawberry
 
 from Service.parameter import ParameterService
+from Resolver.parameter import ParameterResolver
 from schema import ParameterType
 
 from Service.parameterdatasourse import ParameterDataSourseService
+from Resolver.parameterdatasourse import ParameterDataSourseResolver
 from schema import ParameterDataSourseType
 
 from Service.parameterlimit import ParameterLimitService
@@ -36,9 +38,41 @@ from Model.directoryvalue import DirectoryValue
 @strawberry.type
 class Query:
 
-    # @strawberry.field
-    # def hello(self) -> str:
-    #     return "Hello World!"
+    @strawberry.field(description="Получить списки параметров с возможностью фильтрации")
+    async def Param(
+            self,
+            idParameter: Optional[List[int]] = None,
+            nameParameter: Optional[str] = None,
+            idPhysicalType: Optional[List[int]] = None,
+            idPlaceIzmer: Optional[List[int]] = None,
+            idSredaIzmer: Optional[List[int]] = None,
+            idUnits: Optional[List[int]] = None
+    ) -> List[ParameterType]:
+        return await ParameterResolver.getParameters(
+            self,
+            idParameter,
+            nameParameter,
+            idPhysicalType,
+            idPlaceIzmer,
+            idSredaIzmer,
+            idUnits
+        )
+
+    @strawberry.field(description="Получить списки источников данных параметров")
+    async def ParamDatasourses(
+            self,
+            idParameterDataSourse: Optional[List[int]] = None,
+            idParameter: Optional[List[int]] = None,
+            idDataSourse: Optional[List[int]] = None,
+            dataSourseKey: Optional[str] = None
+    ) -> List[ParameterDataSourseType]:
+        return await ParameterDataSourseResolver.getParamDataSourses(
+            self,
+            idParameterDataSourse,
+            idParameter,
+            idDataSourse,
+            dataSourseKey
+        )
 
     @strawberry.field
     # async def get_all_parameters(self) -> List[ParameterType]:
