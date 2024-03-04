@@ -52,4 +52,3 @@ typing_extensions==4.8.0
 tzlocal==5.1
 uvicorn==0.23.2
 Werkzeug==3.0.0
-
