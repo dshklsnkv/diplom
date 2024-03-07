@@ -3,9 +3,39 @@ from Model.parameterlimit import ParameterLimit
 from config import db
 from sqlalchemy.sql import select
 from sqlalchemy import update as sql_update, delete as sql_delete
+from typing import List, Optional
 
 
 class ParameterLimitRepository:
+
+    @staticmethod
+    async def getParameterLimits(
+            idParameterLimit: Optional[List[int]] = None,
+            idParameter: Optional[List[int]] = None,
+            idLimitType: Optional[List[int]] = None,
+            minLimit: Optional[List[int]] = None,
+            maxLimit: Optional[List[int]] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
+    ):
+        async with db as session:
+            query = select(ParameterLimit)
+            if idParameterLimit:
+                query = query.filter(ParameterLimit.id_parameterlimit.in_(idParameterLimit))
+            if idParameter:
+                query = query.filter(ParameterLimit.id_parameter.in_(idParameter))
+            if idLimitType:
+                query = query.filter(ParameterLimit.id_data_sourse.in_(idLimitType))
+            if minLimit:
+                query = query.filter(ParameterLimit.min_limit.in_(minLimit))
+            if maxLimit:
+                query = query.filter(ParameterLimit.max_limit.in_(maxLimit))
+            if momentBegin:
+                query = query.filter(ParameterLimit.moment_begin.like(momentBegin))
+            if momentEnd:
+                query = query.filter(ParameterLimit.moment_end.like(momentEnd))
+            result = await session.execute(query)
+            return result.scalars().all()
 
     @staticmethod
     async def create(parameterlimit_data: ParameterLimit):

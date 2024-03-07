@@ -3,9 +3,27 @@ from Model.parametervalue import ParameterValue
 from config import db
 from sqlalchemy.sql import select
 from sqlalchemy import update as sql_update, delete as sql_delete
+from typing import List, Optional
 
 
 class ParameterValueRepository:
+
+    @staticmethod
+    async def getParameterValues(
+            idParameterDataSourse: Optional[List[int]] = None,
+            momentChange: Optional[datetime] = None,
+            value: Optional[List[int]] = None
+    ):
+        async with db as session:
+            query = select(ParameterValue)
+            if idParameterDataSourse:
+                query = query.filter(ParameterValue.id_parameterdatasourse.in_(idParameterDataSourse))
+            if momentChange:
+                query = query.filter(ParameterValue.moment_change.like(momentChange))
+            if value:
+                query = query.filter(ParameterValue.value.in_(value))
+            result = await session.execute(query)
+            return result.scalars().all()
 
     @staticmethod
     async def create(parametervalue_data: ParameterValue):

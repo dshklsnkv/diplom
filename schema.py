@@ -5,6 +5,17 @@ import strawberry
 
 
 @strawberry.type
+class ParameterLimitType:
+    id_parameterlimit: Optional[int]
+    id_parameter: int
+    id_limit_type: int
+    min_limit: int
+    max_limit: int
+    moment_begin: datetime
+    moment_end: datetime
+
+
+@strawberry.type
 class ParameterValueType:
     id_parameterdatasourse: Optional[int]
     moment_change: Optional[datetime]
@@ -19,6 +30,22 @@ class ParameterDataSourseType:
     data_sourse_key: str
     moment_begin: datetime
     moment_end: datetime
+
+    @strawberry.field(description="Значения")
+    async def ParameterValue(
+            self,
+            momentChange: Optional[datetime] = None,
+            value: Optional[List[int]] = None
+    ) -> List[ParameterValueType]:
+        from Resolver.parametervalue import ParameterValueResolver
+        parentId = []
+        parentId.append(self.id_parameterdatasourse)
+        return await ParameterValueResolver.getParamValues(
+            self=self,
+            idParameterDataSourse=parentId,
+            momentChange=momentChange,
+            value=value
+        )
 
 
 @strawberry.type
@@ -35,7 +62,7 @@ class ParameterType:
     # Вот так описываются Поля-Типы (вложенные сущности / иерархия)
     # Атрибут описывается как Функция, возвращающая сущность или список сущностей
     @strawberry.field(description="Источники данных")
-    async def data_sourse(
+    async def ParameterDataSourse(
             self,
             idDataSourse: Optional[List[int]] = None,
             dataSourseKey: Optional[str] = None
@@ -49,6 +76,28 @@ class ParameterType:
             idParameter=parentId,
             idDataSourse=idDataSourse,
             dataSourseKey=dataSourseKey
+        )
+
+    @strawberry.field(description="Уставки")
+    async def ParameterLimit(
+            self,
+            idLimitType: Optional[List[int]] = None,
+            minLimit: Optional[List[int]] = None,
+            maxLimit: Optional[List[int]] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
+    ) -> List[ParameterLimitType]:
+        from Resolver.parameterlimit import ParameterLimitResolver
+        parentId = []
+        parentId.append(self.id_parameter)
+        return await ParameterLimitResolver.getParameterLimits(
+            self=self,
+            idParameter=parentId,
+            idLimitType=idLimitType,
+            minLimit=minLimit,
+            maxLimit=maxLimit,
+            momentBegin=momentBegin,
+            momentEnd=momentEnd
         )
 
 
@@ -70,17 +119,6 @@ class ParameterDataSourseInput:
     id_parameter: int
     id_data_sourse: int
     data_sourse_key: str
-    moment_begin: datetime
-    moment_end: datetime
-
-
-@strawberry.type
-class ParameterLimitType:
-    id_parameterlimit: Optional[int]
-    id_parameter: int
-    id_limit_type: int
-    min_limit: int
-    max_limit: int
     moment_begin: datetime
     moment_end: datetime
 

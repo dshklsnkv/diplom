@@ -3,9 +3,31 @@ from datetime import datetime
 from Model.parameterlimit import ParameterLimit
 from Repository.parameterlimit import ParameterLimitRepository
 from schema import ParameterLimitInput, ParameterLimitType
+from typing import List, Optional
 
 
 class ParameterLimitService:
+
+    @staticmethod
+    async def getParameterLimits(
+            self,
+            idParameterLimit: Optional[List[int]] = None,
+            idParameter: Optional[List[int]] = None,
+            idLimitType: Optional[List[int]] = None,
+            minLimit: Optional[List[int]] = None,
+            maxLimit: Optional[List[int]] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
+    ):
+        return await ParameterLimitRepository.getParameterLimits(
+            idParameterLimit,
+            idParameter,
+            idLimitType,
+            minLimit,
+            maxLimit,
+            momentBegin,
+            momentEnd
+        )
 
     @staticmethod
     async def add_parameterlimit(parameterlimit_data: ParameterLimitInput):

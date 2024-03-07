@@ -3,9 +3,23 @@ from datetime import datetime
 from Model.parametervalue import ParameterValue
 from Repository.parametervalue import ParameterValueRepository
 from schema import ParameterValueInput, ParameterValueType
+from typing import List, Optional
 
 
 class ParameterValueService:
+
+    @staticmethod
+    async def getParameterValues(
+            self,
+            idParameterDataSourse: Optional[List[int]] = None,
+            momentChange: Optional[datetime] = None,
+            value: Optional[List[int]] = None
+    ):
+        return await ParameterValueRepository.getParameterValues(
+            idParameterDataSourse,
+            momentChange,
+            value
+        )
 
     @staticmethod
     async def add_parametervalue(parametervalue_data: ParameterValueInput):
