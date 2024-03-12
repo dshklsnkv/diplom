@@ -22,6 +22,7 @@ from Service.directory import DirectoryService
 from schema import DirectoryType
 
 from Service.directoryvalue import DirectoryValueService
+from Resolver.directoryvalue import DirectoryValueResolver
 from schema import DirectoryValueType
 
 from typing import Optional
@@ -69,7 +70,6 @@ class Query:
             dataSourseKey: Optional[str] = None
     ) -> List[ParameterDataSourseType]:
         return await ParameterDataSourseResolver.getParamDataSourses(
-            self,
             idParameterDataSourse,
             idParameter,
             idDataSourse,
@@ -84,7 +84,6 @@ class Query:
             value: Optional[List[int]] = None
     ) -> List[ParameterValueType]:
         return await ParameterValueResolver.getParamValues(
-            self,
             idParameterDataSourse,
             momentChange,
             value
@@ -108,6 +107,25 @@ class Query:
             idLimitType,
             minLimit,
             maxLimit,
+            momentBegin,
+            momentEnd
+        )
+
+    @strawberry.field(description="Получить списки знач справочников")
+    async def DirectoryValues(
+            self,
+            idDirectoryValue: Optional[List[int]] = None,
+            idDirectory: Optional[List[int]] = None,
+            longName: Optional[str] = None,
+            shortName: Optional[str] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
+    ) -> List[DirectoryValueType]:
+        return await DirectoryValueResolver.getDirectoryValues(
+            idDirectoryValue,
+            idDirectory,
+            longName,
+            shortName,
             momentBegin,
             momentEnd
         )
@@ -294,39 +312,39 @@ class Query:
     async def get_directory_by_id(self, id_directory: int) -> DirectoryType:
         return await DirectoryService.get_by_id(id_directory)
 
-    @strawberry.field
-    async def DirectoryValues(self, id_directory: Optional[int] = None,
-                              long_name: Optional[str] = None,
-                              short_name: Optional[str] = None,
-                              moment_begin: Optional[datetime] = None,
-                              moment_end: Optional[datetime] = None) -> \
-            List[DirectoryValueType]:
-        async with db as session:
-            query = select(DirectoryValue)
-
-            if id_directory:
-                query = query.where(DirectoryValue.id_directory == id_directory)
-
-            if long_name:
-                query = query.where(DirectoryValue.long_name == long_name)
-
-            if short_name:
-                query = query.where(DirectoryValue.short_name == short_name)
-
-            if moment_begin:
-                query = query.where(DirectoryValue.moment_begin == moment_begin)
-
-            if moment_end:
-                query = query.where(DirectoryValue.moment_end == moment_end)
-
-            result = await session.execute(query)
-            directoryvalues = result.scalars().all()
-
-            return [DirectoryValueType(id_directoryvalue=directoryvalue.id_directoryvalue,
-                                       id_directory=directoryvalue.id_directory,
-                                       long_name=directoryvalue.long_name, short_name=directoryvalue.short_name,
-                                       moment_begin=directoryvalue.moment_begin, moment_end=directoryvalue.moment_end)
-                    for directoryvalue in directoryvalues]
+    # @strawberry.field
+    # async def DirectoryValues(self, id_directory: Optional[int] = None,
+    #                           long_name: Optional[str] = None,
+    #                           short_name: Optional[str] = None,
+    #                           moment_begin: Optional[datetime] = None,
+    #                           moment_end: Optional[datetime] = None) -> \
+    #         List[DirectoryValueType]:
+    #     async with db as session:
+    #         query = select(DirectoryValue)
+    #
+    #         if id_directory:
+    #             query = query.where(DirectoryValue.id_directory == id_directory)
+    #
+    #         if long_name:
+    #             query = query.where(DirectoryValue.long_name == long_name)
+    #
+    #         if short_name:
+    #             query = query.where(DirectoryValue.short_name == short_name)
+    #
+    #         if moment_begin:
+    #             query = query.where(DirectoryValue.moment_begin == moment_begin)
+    #
+    #         if moment_end:
+    #             query = query.where(DirectoryValue.moment_end == moment_end)
+    #
+    #         result = await session.execute(query)
+    #         directoryvalues = result.scalars().all()
+    #
+    #         return [DirectoryValueType(id_directoryvalue=directoryvalue.id_directoryvalue,
+    #                                    id_directory=directoryvalue.id_directory,
+    #                                    long_name=directoryvalue.long_name, short_name=directoryvalue.short_name,
+    #                                    moment_begin=directoryvalue.moment_begin, moment_end=directoryvalue.moment_end)
+    #                 for directoryvalue in directoryvalues]
 
     @strawberry.field
     async def get_directoryvalue_by_id(self, id_directoryvalue: int) -> DirectoryValueType:

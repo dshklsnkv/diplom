@@ -1,7 +1,7 @@
 import os
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import text
 
 from sqlmodel import SQLModel
@@ -15,8 +15,8 @@ DB_CONFIG = os.getenv('DB_CONFIG')
 class DatabaseSession:
     def __init__(self, url: str = DB_CONFIG):
         self.engine = create_async_engine(url, echo=True)
-        self.SessionLocal = sessionmaker(
-            bind=self.engine,
+        self.async_session = sessionmaker(
+            self.engine,
             class_=AsyncSession,
             expire_on_commit=False,
         )
@@ -34,23 +34,24 @@ class DatabaseSession:
     async def close(self):
         await self.engine.dispose()
 
-    async def __aenter__(self) -> Session:
-        self.session = self.SessionLocal()
+    async def __aenter__(self) -> AsyncSession:
+        self.session = self.async_session()
         return self.session
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await self.session.close()
+        # await self.session.close()
+        return self.session
 
-    async def get_db(self) -> AsyncSession:
-        async with self as db:
-            yield db
+    # async def get_db(self) -> AsyncSession:
+    #     async with self as db:
+    #         yield db
 
-    async def commit_rollback(self):
-        try:
-            await self.session.commit()
-        except Exception:
-            await self.session.rollback()
-            raise
+    # async def commit_rollback(self):
+    #     try:
+    #         await self.session.commit()
+    #     except Exception:
+    #         await self.session.rollback()
+    #         raise
 
 
 db = DatabaseSession()

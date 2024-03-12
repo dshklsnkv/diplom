@@ -10,7 +10,6 @@ class ParameterDataSourseService:
 
     @staticmethod
     async def getParameterDataSourses(
-            self,
             idParameterDataSourse: Optional[List[int]] = None,
             idParameter: Optional[List[int]] = None,
             idDataSourse: Optional[List[int]] = None,

@@ -10,7 +10,6 @@ class ParameterLimitService:
 
     @staticmethod
     async def getParameterLimits(
-            self,
             idParameterLimit: Optional[List[int]] = None,
             idParameter: Optional[List[int]] = None,
             idLimitType: Optional[List[int]] = None,

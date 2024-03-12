@@ -10,18 +10,16 @@ class ParameterDataSourseResolver:
 
     @staticmethod
     async def getParamDataSourses(
-            self,
             idParameterDataSourse: Optional[List[int]] = None,
             idParameter: Optional[List[int]] = None,
             idDataSourse: Optional[List[int]] = None,
             dataSourseKey: Optional[str] = None
     ) -> List[ParameterDataSourseType]:
         parameterdatasourses = await ParameterDataSourseService.getParameterDataSourses(
-            self,
-            idParameterDataSourse,
-            idParameter,
-            idDataSourse,
-            dataSourseKey
+            idParameterDataSourse=idParameterDataSourse,
+            idParameter=idParameter,
+            idDataSourse=idDataSourse,
+            dataSourseKey=dataSourseKey
         )
         return [ParameterDataSourseType(
             id_parameterdatasourse=parameterdatasourse.id_parameterdatasourse,

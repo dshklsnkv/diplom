@@ -3,9 +3,37 @@ from Model.directoryvalue import DirectoryValue
 from config import db
 from sqlalchemy.sql import select
 from sqlalchemy import update as sql_update, delete as sql_delete
+from typing import Optional, List
 
 
 class DirectoryValueRepository:
+
+    # Запрос источников данных параметра(ов)
+    @staticmethod
+    async def getDirectoryValues(
+            idDirectoryValue: Optional[List[int]] = None,
+            idDirectory: Optional[List[int]] = None,
+            longName: Optional[str] = None,
+            shortName: Optional[str] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
+    ):
+        async with db as session:
+            query = select(DirectoryValue)
+            if idDirectoryValue:
+                query = query.filter(DirectoryValue.id_directoryvalue.in_(idDirectoryValue))
+            if idDirectory:
+                query = query.filter(DirectoryValue.id_directory.in_(idDirectory))
+            if longName:
+                query = query.filter(DirectoryValue.long_name.like(longName))
+            if shortName:
+                query = query.filter(DirectoryValue.short_name.ilike(shortName))
+            if momentBegin:
+                query = query.filter(DirectoryValue.moment_begin.like(momentBegin))
+            if momentEnd:
+                query = query.filter(DirectoryValue.moment_end.like(momentEnd))
+            result = await session.execute(query)
+            return result.scalars().all()
 
     @staticmethod
     async def create(directoryvalue_data: DirectoryValue):

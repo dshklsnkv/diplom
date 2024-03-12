@@ -11,7 +11,6 @@ class ParameterLimitResolver:
 
     @staticmethod
     async def getParameterLimits(
-            self,
             idParameterLimit: Optional[List[int]] = None,
             idParameter: Optional[List[int]] = None,
             idLimitType: Optional[List[int]] = None,
@@ -22,14 +21,13 @@ class ParameterLimitResolver:
     ) -> List[ParameterLimitType]:
         # Получение данных из сервиса
         parameterlimits = await ParameterLimitService.getParameterLimits(
-            self,
-            idParameterLimit,
-            idParameter,
-            idLimitType,
-            minLimit,
-            maxLimit,
-            momentBegin,
-            momentEnd
+            idParameterLimit=idParameterLimit,
+            idParameter=idParameter,
+            idLimitType=idLimitType,
+            minLimit=minLimit,
+            maxLimit=maxLimit,
+            momentBegin=momentBegin,
+            momentEnd=momentEnd
         )
         # Преобразование данных сервиса в тип GraphQL
         return [ParameterLimitType(

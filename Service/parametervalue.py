@@ -10,7 +10,6 @@ class ParameterValueService:
 
     @staticmethod
     async def getParameterValues(
-            self,
             idParameterDataSourse: Optional[List[int]] = None,
             momentChange: Optional[datetime] = None,
             value: Optional[List[int]] = None

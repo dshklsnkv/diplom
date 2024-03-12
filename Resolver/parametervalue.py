@@ -11,16 +11,14 @@ class ParameterValueResolver:
 
     @staticmethod
     async def getParamValues(
-            self,
             idParameterDataSourse: Optional[List[int]] = None,
             momentChange: Optional[datetime] = None,
             value: Optional[List[int]] = None
     ) -> List[ParameterValueType]:
         parametervalues = await ParameterValueService.getParameterValues(
-            self,
-            idParameterDataSourse,
-            momentChange,
-            value
+            idParameterDataSourse=idParameterDataSourse,
+            momentChange=momentChange,
+            value=value
         )
         return [ParameterValueType(
             id_parameterdatasourse=parametervalue.id_parameterdatasourse,

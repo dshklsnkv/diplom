@@ -11,7 +11,6 @@ class ParameterService:
     # Получить Параметры с возможностью фильтрации данных
     @staticmethod
     async def getParameters(
-            root,
             idParameter: Optional[List[int]] = None,
             nameParameter: Optional[str] = None,
             idPhysicalType: Optional[List[int]] = None,

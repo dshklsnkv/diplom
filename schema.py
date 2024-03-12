@@ -14,12 +14,119 @@ class ParameterLimitType:
     moment_begin: datetime
     moment_end: datetime
 
+    @strawberry.field(description="Тип_уставки(значение справочника)")
+    async def DirectoryValue(
+            self,
+            idDirectory: Optional[List[int]] = None,
+            longName: Optional[str] = None,
+            shortName: Optional[str] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
+    ) -> List['DirectoryValueType']:
+        from Resolver.directoryvalue import DirectoryValueResolver
+        parentId = [self.id_parameterlimit]
+        return await DirectoryValueResolver.getDirectoryValues(
+            idDirectoryValue=parentId,
+            idDirectory=idDirectory,
+            longName=longName,
+            shortName=shortName,
+            momentBegin=momentBegin,
+            momentEnd=momentEnd
+        )
+
+    @strawberry.field(description="Параметры")
+    async def Parameter(
+            self,
+            nameParameter: Optional[str] = None,
+            idPhysicalType: Optional[List[int]] = None,
+            idPlaceIzmer: Optional[List[int]] = None,
+            idSredaIzmer: Optional[List[int]] = None,
+            idUnits: Optional[List[int]] = None
+    ) -> List['ParameterType']:
+        from Resolver.parameter import ParameterResolver
+        parentId = [self.id_parameter]
+        return await ParameterResolver.getParameters(
+            idParameter=parentId,
+            nameParameter=nameParameter,
+            idPhysicalType=idPhysicalType,
+            idPlaceIzmer=idPlaceIzmer,
+            idSredaIzmer=idSredaIzmer,
+            idUnits=idUnits
+        )
+
+
+@strawberry.type
+class DirectoryValueType:
+    id_directoryvalue: Optional[int]
+    id_directory: int
+    long_name: str
+    short_name: str
+    moment_begin: datetime
+    moment_end: datetime
+
+    @strawberry.field(description="Уставки")
+    async def ParameterLimit(
+            self,
+            idLimitType: Optional[List[int]] = None,
+            minLimit: Optional[List[int]] = None,
+            maxLimit: Optional[List[int]] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
+    ) -> List[ParameterLimitType]:
+        from Resolver.parameterlimit import ParameterLimitResolver
+        parentId = [self.id_directoryvalue]
+        return await ParameterLimitResolver.getParameterLimits(
+            idParameterLimit=parentId,
+            idLimitType=idLimitType,
+            minLimit=minLimit,
+            maxLimit=maxLimit,
+            momentBegin=momentBegin,
+            momentEnd=momentEnd
+        )
+
 
 @strawberry.type
 class ParameterValueType:
     id_parameterdatasourse: Optional[int]
     moment_change: Optional[datetime]
     value: int
+
+    @strawberry.field(description="Источники данных")
+    async def ParameterDataSourse(
+            self,
+            idParameter: Optional[List[int]] = None,
+            idDataSourse: Optional[List[int]] = None,
+            dataSourseKey: Optional[str] = None
+    ) -> List['ParameterDataSourseType']:
+        from Resolver.parameterdatasourse import ParameterDataSourseResolver
+        parentId = [self.id_parameterdatasourse]
+        # Вызываем резолвер. В параметр резолвера передаем ключ от родителя (self.id_parameter)
+        return await ParameterDataSourseResolver.getParamDataSourses(
+            idParameterDataSourse=parentId,
+            idParameter=idParameter,
+            idDataSourse=idDataSourse,
+            dataSourseKey=dataSourseKey
+        )
+
+    @strawberry.field(description="Параметры")
+    async def Parameter(
+            self,
+            nameParameter: Optional[str] = None,
+            idPhysicalType: Optional[List[int]] = None,
+            idPlaceIzmer: Optional[List[int]] = None,
+            idSredaIzmer: Optional[List[int]] = None,
+            idUnits: Optional[List[int]] = None
+    ) -> List['ParameterType']:
+        from Resolver.parameter import ParameterResolver
+        parentId = [self.id_parameterdatasourse]
+        return await ParameterResolver.getParameters(
+            idParameter=parentId,
+            nameParameter=nameParameter,
+            idPhysicalType=idPhysicalType,
+            idPlaceIzmer=idPlaceIzmer,
+            idSredaIzmer=idSredaIzmer,
+            idUnits=idUnits
+        )
 
 
 @strawberry.type
@@ -31,6 +138,26 @@ class ParameterDataSourseType:
     moment_begin: datetime
     moment_end: datetime
 
+    @strawberry.field(description="Тип_уставки(значение справочника)")
+    async def DirectoryValue(
+            self,
+            idDirectory: Optional[List[int]] = None,
+            longName: Optional[str] = None,
+            shortName: Optional[str] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
+    ) -> List['DirectoryValueType']:
+        from Resolver.directoryvalue import DirectoryValueResolver
+        parentId = [self.id_parameterdatasourse]
+        return await DirectoryValueResolver.getDirectoryValues(
+            idDirectoryValue=parentId,
+            idDirectory=idDirectory,
+            longName=longName,
+            shortName=shortName,
+            momentBegin=momentBegin,
+            momentEnd=momentEnd
+        )
+
     @strawberry.field(description="Значения")
     async def ParameterValue(
             self,
@@ -38,10 +165,8 @@ class ParameterDataSourseType:
             value: Optional[List[int]] = None
     ) -> List[ParameterValueType]:
         from Resolver.parametervalue import ParameterValueResolver
-        parentId = []
-        parentId.append(self.id_parameterdatasourse)
+        parentId = [self.id_parameterdatasourse]
         return await ParameterValueResolver.getParamValues(
-            self=self,
             idParameterDataSourse=parentId,
             momentChange=momentChange,
             value=value
@@ -68,11 +193,8 @@ class ParameterType:
             dataSourseKey: Optional[str] = None
     ) -> List[ParameterDataSourseType]:
         from Resolver.parameterdatasourse import ParameterDataSourseResolver
-        parentId = []
-        parentId.append(self.id_parameter)
-        # Вызываем резолвер. В параметр резолвера передаем ключ от родителя (self.id_parameter)
+        parentId = [self.id_parameter]
         return await ParameterDataSourseResolver.getParamDataSourses(
-            self=self,
             idParameter=parentId,
             idDataSourse=idDataSourse,
             dataSourseKey=dataSourseKey
@@ -91,13 +213,27 @@ class ParameterType:
         parentId = []
         parentId.append(self.id_parameter)
         return await ParameterLimitResolver.getParameterLimits(
-            self=self,
             idParameter=parentId,
             idLimitType=idLimitType,
             minLimit=minLimit,
             maxLimit=maxLimit,
             momentBegin=momentBegin,
             momentEnd=momentEnd
+        )
+
+    @strawberry.field(description="Значения")
+    async def ParameterValue(
+            self,
+            momentChange: Optional[datetime] = None,
+            value: Optional[List[int]] = None
+    ) -> List[ParameterValueType]:
+        from Resolver.parametervalue import ParameterValueResolver
+        parentId = [self.id_parameter]
+        # Вызываем резолвер. В параметр резолвера передаем ключ от родителя (self.id_parameter)
+        return await ParameterValueResolver.getParamValues(
+            idParameterDataSourse=parentId,
+            momentChange=momentChange,
+            value=value
         )
 
 
@@ -153,16 +289,6 @@ class DirectoryType:
 class DirectoryInput:
     id_directory: Optional[int]
     name_directory: str
-    moment_begin: datetime
-    moment_end: datetime
-
-
-@strawberry.type
-class DirectoryValueType:
-    id_directoryvalue: Optional[int]
-    id_directory: int
-    long_name: str
-    short_name: str
     moment_begin: datetime
     moment_end: datetime
 

@@ -25,7 +25,7 @@ class ParameterLimitRepository:
             if idParameter:
                 query = query.filter(ParameterLimit.id_parameter.in_(idParameter))
             if idLimitType:
-                query = query.filter(ParameterLimit.id_data_sourse.in_(idLimitType))
+                query = query.filter(ParameterLimit.id_limit_type.in_(idLimitType))
             if minLimit:
                 query = query.filter(ParameterLimit.min_limit.in_(minLimit))
             if maxLimit:

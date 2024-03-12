@@ -3,9 +3,28 @@ from datetime import datetime
 from Model.directoryvalue import DirectoryValue
 from Repository.directoryvalue import DirectoryValueRepository
 from schema import DirectoryValueInput, DirectoryValueType
+from typing import Optional, List
 
 
 class DirectoryValueService:
+
+    @staticmethod
+    async def getDirectoryValues(
+            idDirectoryValue: Optional[List[int]] = None,
+            idDirectory: Optional[List[int]] = None,
+            longName: Optional[str] = None,
+            shortName: Optional[str] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
+    ):
+        return await DirectoryValueRepository.getDirectoryValues(
+            idDirectoryValue,
+            idDirectory,
+            longName,
+            shortName,
+            momentBegin,
+            momentEnd
+        )
 
     @staticmethod
     async def add_directoryvalue(directoryvalue_data: DirectoryValueInput):

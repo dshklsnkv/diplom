@@ -10,7 +10,6 @@ class ParameterResolver:
 
     @staticmethod
     async def getParameters(
-            root,
             idParameter: Optional[List[int]] = None,
             nameParameter: Optional[str] = None,
             idPhysicalType: Optional[List[int]] = None,
@@ -20,7 +19,6 @@ class ParameterResolver:
     ) -> List[ParameterType]:
         # Получение данных из сервиса
         parameters = await ParameterService.getParameters(
-            root,
             idParameter=idParameter,
             nameParameter=nameParameter,
             idPhysicalType=idPhysicalType,
