@@ -52,7 +52,6 @@ class Query:
             idUnits: Optional[List[int]] = None
     ) -> List[ParameterType]:
         return await ParameterResolver.getParameters(
-            self,
             idParameter,
             nameParameter,
             idPhysicalType,

@@ -84,6 +84,23 @@ class DirectoryValueType:
             momentEnd=momentEnd
         )
 
+    @strawberry.field(description="Источники данных")
+    async def ParameterDataSourse(
+            self,
+            idParameter: Optional[List[int]] = None,
+            idDataSourse: Optional[List[int]] = None,
+            dataSourseKey: Optional[str] = None
+    ) -> List['ParameterDataSourseType']:
+        from Resolver.parameterdatasourse import ParameterDataSourseResolver
+        parentId = [self.id_directoryvalue]
+        # Вызываем резолвер. В параметр резолвера передаем ключ от родителя (self.id_parameter)
+        return await ParameterDataSourseResolver.getParamDataSourses(
+            idParameterDataSourse=parentId,
+            idParameter=idParameter,
+            idDataSourse=idDataSourse,
+            dataSourseKey=dataSourseKey
+        )
+
 
 @strawberry.type
 class ParameterValueType:
@@ -170,6 +187,26 @@ class ParameterDataSourseType:
             idParameterDataSourse=parentId,
             momentChange=momentChange,
             value=value
+        )
+
+    @strawberry.field(description="Параметры")
+    async def Parameter(
+            self,
+            nameParameter: Optional[str] = None,
+            idPhysicalType: Optional[List[int]] = None,
+            idPlaceIzmer: Optional[List[int]] = None,
+            idSredaIzmer: Optional[List[int]] = None,
+            idUnits: Optional[List[int]] = None
+    ) -> List['ParameterType']:
+        from Resolver.parameter import ParameterResolver
+        parentId = [self.id_parameter]
+        return await ParameterResolver.getParameters(
+            idParameter=parentId,
+            nameParameter=nameParameter,
+            idPhysicalType=idPhysicalType,
+            idPlaceIzmer=idPlaceIzmer,
+            idSredaIzmer=idSredaIzmer,
+            idUnits=idUnits
         )
 
 
