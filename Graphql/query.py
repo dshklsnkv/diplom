@@ -26,7 +26,7 @@ from Resolver.directoryvalue import DirectoryValueResolver
 from schema import DirectoryValueType
 
 from typing import Optional
-from config import db
+from config import async_db
 from sqlalchemy.sql import select
 from Model.parameter import Parameter
 from datetime import datetime

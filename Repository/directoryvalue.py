@@ -1,8 +1,9 @@
 from datetime import datetime
 from Model.directoryvalue import DirectoryValue
-from config import db
-from sqlalchemy.sql import select
-from sqlalchemy import update as sql_update, delete as sql_delete
+from config import async_db
+from sqlalchemy import select, update, delete
+from sqlalchemy.orm import Session
+from sqlmodel import SQLModel, select
 from typing import Optional, List
 
 
@@ -18,7 +19,7 @@ class DirectoryValueRepository:
             momentBegin: Optional[datetime] = None,
             momentEnd: Optional[datetime] = None
     ):
-        async with db as session:
+        async with async_db() as session:
             query = select(DirectoryValue)
             if idDirectoryValue:
                 query = query.filter(DirectoryValue.id_directoryvalue.in_(idDirectoryValue))
@@ -37,14 +38,14 @@ class DirectoryValueRepository:
 
     @staticmethod
     async def create(directoryvalue_data: DirectoryValue):
-        async with db as session:
+        async with async_db() as session:
             async with session.begin():
                 session.add(directoryvalue_data)
-            await db.commit_rollback()
+            await session.commit()
 
     @staticmethod
     async def get_directoryvalue_by_id(directoryvalue_id: int):
-        async with db as session:
+        async with async_db() as session:
             stmt = select(DirectoryValue).where(DirectoryValue.id_directoryvalue == directoryvalue_id)
             result = await session.execute(stmt)
             directoryvalue = result.scalars().first()
@@ -52,14 +53,14 @@ class DirectoryValueRepository:
 
     @staticmethod
     async def get_all_directoryvalues():
-        async with db as session:
+        async with async_db() as session:
             query = select(DirectoryValue)
             result = await session.execute(query)
             return result.scalars().all()
 
     @staticmethod
     async def update(directoryvalue_id: int, directoryvalue_data: DirectoryValue):
-        async with db as session:
+        async with async_db() as session:
             stmt = select(DirectoryValue).where(DirectoryValue.id_directoryvalue == directoryvalue_id)
             result = await session.execute(stmt)
 
@@ -72,20 +73,20 @@ class DirectoryValueRepository:
 
             # query = sql_update(Parameter).where(Parameter.id_parameter == parameter_id).values({
             #     "name_parameter": "123",  "id_place_izmer": 11}).execution_options(synchronize_session="fetch")
-            query = sql_update(DirectoryValue).where(DirectoryValue.id_directoryvalue == directoryvalue_id).values(
+            query = update(DirectoryValue).where(DirectoryValue.id_directoryvalue == directoryvalue_id).values(
                 # **parameter.dict()).execution_options(synchronize_session="fetch")
                 id_directory=directoryvalue.id_directory,
                 long_name=directoryvalue.long_name,
                 short_name=directoryvalue.short_name,
                 moment_begin=directoryvalue.moment_begin,
-                moment_end=directoryvalue.moment_end).execution_options(synchronize_session="fetch")
+                moment_end=directoryvalue.moment_end)
 
             await session.execute(query)
-            await db.commit_rollback()
+            await session.commit()
 
     @staticmethod
     async def delete(directoryvalue_id: int):
-        async with db as session:
-            query = sql_delete(DirectoryValue).where(DirectoryValue.id_directoryvalue == directoryvalue_id)
+        async with async_db() as session:
+            query = delete(DirectoryValue).where(DirectoryValue.id_directoryvalue == directoryvalue_id)
             await session.execute(query)
-            await db.commit_rollback()
+            await session.commit()

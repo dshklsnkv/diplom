@@ -1,8 +1,9 @@
 from datetime import datetime
 from Model.parametervalue import ParameterValue
-from config import db
-from sqlalchemy.sql import select
-from sqlalchemy import update as sql_update, delete as sql_delete
+from config import async_db
+from sqlalchemy import select, update, delete
+from sqlalchemy.orm import Session
+from sqlmodel import SQLModel, select
 from typing import List, Optional
 
 
@@ -14,7 +15,7 @@ class ParameterValueRepository:
             momentChange: Optional[datetime] = None,
             value: Optional[List[int]] = None
     ):
-        async with db as session:
+        async with async_db() as session:
             query = select(ParameterValue)
             if idParameterDataSourse:
                 query = query.filter(ParameterValue.id_parameterdatasourse.in_(idParameterDataSourse))
@@ -27,14 +28,14 @@ class ParameterValueRepository:
 
     @staticmethod
     async def create(parametervalue_data: ParameterValue):
-        async with db as session:
+        async with async_db() as session:
             async with session.begin():
                 session.add(parametervalue_data)
-            await db.commit_rollback()
+            await session.commit()
 
     @staticmethod
     async def get_parametervalue_by_id(parametervalue_id: int):
-        async with db as session:
+        async with async_db() as session:
             stmt = select(ParameterValue).where(
                 ParameterValue.id_parameterdatasourse == parametervalue_id)
             result = await session.execute(stmt)
@@ -43,14 +44,14 @@ class ParameterValueRepository:
 
     @staticmethod
     async def get_all_parametervalues():
-        async with db as session:
+        async with async_db() as session:
             query = select(ParameterValue)
             result = await session.execute(query)
             return result.scalars().all()
 
     @staticmethod
     async def update(parametervalue_id: int, parametervalue_data: ParameterValue):
-        async with db as session:
+        async with async_db() as session:
             stmt = select(ParameterValue).where(
                 ParameterValue.id_parameterdatasourse == parametervalue_id)
             result = await session.execute(stmt)
@@ -61,19 +62,19 @@ class ParameterValueRepository:
 
             # query = sql_update(Parameter).where(Parameter.id_parameter == parameter_id).values({
             #     "name_parameter": "123",  "id_place_izmer": 11}).execution_options(synchronize_session="fetch")
-            query = sql_update(ParameterValue).where(
+            query = update(ParameterValue).where(
                 ParameterValue.id_parameterdatasourse == parametervalue_id).values(
                 # **parameter.dict()).execution_options(synchronize_session="fetch")
                 moment_change=parametervalue.moment_change,
-                value=parametervalue_data.value).execution_options(synchronize_session="fetch")
+                value=parametervalue_data.value)
 
             await session.execute(query)
-            await db.commit_rollback()
+            await session.commit()
 
     @staticmethod
     async def delete(parametervalue_id: int):
-        async with db as session:
-            query = sql_delete(ParameterValue).where(
+        async with async_db() as session:
+            query = delete(ParameterValue).where(
                 ParameterValue.id_parameterdatasourse == parametervalue_id)
             await session.execute(query)
-            await db.commit_rollback()
+            await session.commit()

@@ -1,8 +1,9 @@
 from datetime import datetime
 from Model.parameterlimit import ParameterLimit
-from config import db
-from sqlalchemy.sql import select
-from sqlalchemy import update as sql_update, delete as sql_delete
+from config import async_db
+from sqlalchemy import select, update, delete
+from sqlalchemy.orm import Session
+from sqlmodel import SQLModel, select
 from typing import List, Optional
 
 
@@ -18,7 +19,7 @@ class ParameterLimitRepository:
             momentBegin: Optional[datetime] = None,
             momentEnd: Optional[datetime] = None
     ):
-        async with db as session:
+        async with async_db() as session:
             query = select(ParameterLimit)
             if idParameterLimit:
                 query = query.filter(ParameterLimit.id_parameterlimit.in_(idParameterLimit))
@@ -39,14 +40,14 @@ class ParameterLimitRepository:
 
     @staticmethod
     async def create(parameterlimit_data: ParameterLimit):
-        async with db as session:
+        async with async_db as session:
             async with session.begin():
                 session.add(parameterlimit_data)
-            await db.commit_rollback()
+            await session.commit()
 
     @staticmethod
     async def get_parameterlimit_by_id(parameterlimit_id: int):
-        async with db as session:
+        async with async_db as session:
             stmt = select(ParameterLimit).where(
                 ParameterLimit.id_parameterlimit == parameterlimit_id)
             result = await session.execute(stmt)
@@ -55,14 +56,14 @@ class ParameterLimitRepository:
 
     @staticmethod
     async def get_all_parameterlimits():
-        async with db as session:
+        async with async_db as session:
             query = select(ParameterLimit)
             result = await session.execute(query)
             return result.scalars().all()
 
     @staticmethod
     async def update(parameterlimit_id: int, parameterlimit_data: ParameterLimit):
-        async with db as session:
+        async with async_db as session:
             stmt = select(ParameterLimit).where(
                 ParameterLimit.id_parameterlimit == parameterlimit_id)
             result = await session.execute(stmt)
@@ -77,7 +78,7 @@ class ParameterLimitRepository:
 
             # query = sql_update(Parameter).where(Parameter.id_parameter == parameter_id).values({
             #     "name_parameter": "123",  "id_place_izmer": 11}).execution_options(synchronize_session="fetch")
-            query = sql_update(ParameterLimit).where(
+            query = update(ParameterLimit).where(
                 ParameterLimit.id_parameterlimit == parameterlimit_id).values(
                 # **parameter.dict()).execution_options(synchronize_session="fetch")
                 id_parameter=parameterlimit_data.id_parameter,
@@ -85,15 +86,15 @@ class ParameterLimitRepository:
                 min_limit=parameterlimit_data.min_limit,
                 max_limit=parameterlimit_data.max_limit,
                 moment_begin=parameterlimit_data.moment_begin,
-                moment_end=parameterlimit_data.moment_end).execution_options(synchronize_session="fetch")
+                moment_end=parameterlimit_data.moment_end)
 
             await session.execute(query)
-            await db.commit_rollback()
+            await session.commit()
 
     @staticmethod
     async def delete(parameterlimit_id: int):
-        async with db as session:
-            query = sql_delete(ParameterLimit).where(
+        async with async_db as session:
+            query = delete(ParameterLimit).where(
                 ParameterLimit.id_parameterlimit == parameterlimit_id)
             await session.execute(query)
-            await db.commit_rollback()
+            await session.commit()
