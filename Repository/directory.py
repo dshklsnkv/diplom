@@ -4,9 +4,30 @@ from config import async_db
 from sqlalchemy import select, update, delete
 from sqlalchemy.orm import Session
 from sqlmodel import SQLModel, select
+from typing import Optional, List
 
 
 class DirectoryRepository:
+
+    @staticmethod
+    async def getDirectorys(
+            idDirectory: Optional[List[int]] = None,
+            nameDirectory: Optional[str] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
+    ):
+        async with async_db() as session:
+            query = select(Directory)
+            if idDirectory:
+                query = query.filter(Directory.id_directory.in_(idDirectory))
+            if nameDirectory:
+                query = query.filter(Directory.name_directory.like(nameDirectory))
+            if momentBegin:
+                query = query.filter(Directory.moment_begin.like(momentBegin))
+            if momentEnd:
+                query = query.filter(Directory.moment_end.like(momentEnd))
+            result = await session.execute(query)
+            return result.scalars().all()
 
     @staticmethod
     async def create(directory_data: Directory):

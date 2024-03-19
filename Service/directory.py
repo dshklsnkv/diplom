@@ -3,9 +3,24 @@ from datetime import datetime
 from Model.directory import Directory
 from Repository.directory import DirectoryRepository
 from schema import DirectoryInput, DirectoryType
+from typing import Optional, List
 
 
 class DirectoryService:
+
+    @staticmethod
+    async def getDirectorys(
+            idDirectory: Optional[List[int]] = None,
+            nameDirectory: Optional[str] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
+    ):
+        return await DirectoryRepository.getDirectorys(
+            idDirectory,
+            nameDirectory,
+            momentBegin,
+            momentEnd
+        )
 
     @staticmethod
     async def add_directory(directory_data: DirectoryInput):

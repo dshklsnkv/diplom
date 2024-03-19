@@ -19,6 +19,7 @@ from Resolver.parametervalue import ParameterValueResolver
 from schema import ParameterValueType
 
 from Service.directory import DirectoryService
+from Resolver.directory import DirectoryResolver
 from schema import DirectoryType
 
 from Service.directoryvalue import DirectoryValueService
@@ -128,6 +129,45 @@ class Query:
             momentBegin,
             momentEnd
         )
+
+    @strawberry.field
+    async def Directorys(
+            self,
+            idDirectory: Optional[List[int]] = None,
+            nameDirectory: Optional[str] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
+    ) -> List[DirectoryType]:
+        return await DirectoryResolver.getDirectorys(
+            idDirectory,
+            nameDirectory,
+            momentBegin,
+            momentEnd
+        )
+
+
+        #             (self, name_directory: Optional[str] = None,
+        #                  moment_begin: Optional[datetime] = None,
+        #                  moment_end: Optional[datetime] = None) -> \
+        #     List[DirectoryType]:
+        # async with async_db as session:
+        #     query = select(Directory)
+        #
+        #     if name_directory:
+        #         query = query.where(Directory.name_directory == name_directory)
+        #
+        #     if moment_begin:
+        #         query = query.where(Directory.moment_begin == moment_begin)
+        #
+        #     if moment_end:
+        #         query = query.where(Directory.moment_end == moment_end)
+        #
+        #     result = await session.execute(query)
+        #     directorys = result.scalars().all()
+        #
+        #     return [DirectoryType(id_directory=directory.id_directory, name_directory=directory.name_directory,
+        #                           moment_begin=directory.moment_begin, moment_end=directory.moment_end) for
+        #             directory in directorys]
 
     # @strawberry.field
     # # async def get_all_parameters(self) -> List[ParameterType]:
@@ -282,30 +322,6 @@ class Query:
     @strawberry.field
     async def get_parametervalue_by_id(self, id_parameterdatasourse: int) -> ParameterValueType:
         return await ParameterValueService.get_by_id(id_parameterdatasourse)
-
-    @strawberry.field
-    async def Directorys(self, name_directory: Optional[str] = None,
-                         moment_begin: Optional[datetime] = None,
-                         moment_end: Optional[datetime] = None) -> \
-            List[DirectoryType]:
-        async with db as session:
-            query = select(Directory)
-
-            if name_directory:
-                query = query.where(Directory.name_directory == name_directory)
-
-            if moment_begin:
-                query = query.where(Directory.moment_begin == moment_begin)
-
-            if moment_end:
-                query = query.where(Directory.moment_end == moment_end)
-
-            result = await session.execute(query)
-            directorys = result.scalars().all()
-
-            return [DirectoryType(id_directory=directory.id_directory, name_directory=directory.name_directory,
-                                  moment_begin=directory.moment_begin, moment_end=directory.moment_end) for
-                    directory in directorys]
 
     @strawberry.field
     async def get_directory_by_id(self, id_directory: int) -> DirectoryType:
