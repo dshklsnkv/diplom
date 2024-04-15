@@ -8,6 +8,7 @@ from Graphql.query import Query
 from Graphql.mutation import Mutation
 
 from strawberry.fastapi import GraphQLRouter
+from fastapi.middleware.cors import CORSMiddleware
 
 
 def init_app():
@@ -16,7 +17,11 @@ def init_app():
         description="Fast API",
         version="1.0.0"
     )
-
+    apps.add_middleware(CORSMiddleware,
+                        allow_origins=["*"],
+                        allow_credentials=True,
+                        allow_methods=["*"],
+                        allow_headers=["*"])
     # @apps.on_event("startup")
     # async def startup():
     #     async with async_db() as session:
@@ -40,6 +45,7 @@ def init_app():
 
 
 app = init_app()
+
 
 if __name__ == '__main__':
     uvicorn.run("main:app", host="localhost", port=8888, reload=True)

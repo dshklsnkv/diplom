@@ -101,7 +101,6 @@ class Query:
             momentEnd: Optional[datetime] = None
     ) -> List[ParameterLimitType]:
         return await ParameterLimitResolver.getParameterLimits(
-            self,
             idParameterLimit,
             idParameter,
             idLimitType,
@@ -144,7 +143,6 @@ class Query:
             momentBegin,
             momentEnd
         )
-
 
         #             (self, name_directory: Optional[str] = None,
         #                  moment_begin: Optional[datetime] = None,

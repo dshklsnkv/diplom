@@ -40,14 +40,14 @@ class ParameterLimitRepository:
 
     @staticmethod
     async def create(parameterlimit_data: ParameterLimit):
-        async with async_db as session:
+        async with async_db() as session:
             async with session.begin():
                 session.add(parameterlimit_data)
             await session.commit()
 
     @staticmethod
     async def get_parameterlimit_by_id(parameterlimit_id: int):
-        async with async_db as session:
+        async with async_db() as session:
             stmt = select(ParameterLimit).where(
                 ParameterLimit.id_parameterlimit == parameterlimit_id)
             result = await session.execute(stmt)
@@ -56,14 +56,14 @@ class ParameterLimitRepository:
 
     @staticmethod
     async def get_all_parameterlimits():
-        async with async_db as session:
+        async with async_db() as session:
             query = select(ParameterLimit)
             result = await session.execute(query)
             return result.scalars().all()
 
     @staticmethod
     async def update(parameterlimit_id: int, parameterlimit_data: ParameterLimit):
-        async with async_db as session:
+        async with async_db() as session:
             stmt = select(ParameterLimit).where(
                 ParameterLimit.id_parameterlimit == parameterlimit_id)
             result = await session.execute(stmt)
@@ -93,7 +93,7 @@ class ParameterLimitRepository:
 
     @staticmethod
     async def delete(parameterlimit_id: int):
-        async with async_db as session:
+        async with async_db() as session:
             query = delete(ParameterLimit).where(
                 ParameterLimit.id_parameterlimit == parameterlimit_id)
             await session.execute(query)

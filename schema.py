@@ -72,7 +72,7 @@ class DirectoryValueType:
             maxLimit: Optional[List[int]] = None,
             momentBegin: Optional[datetime] = None,
             momentEnd: Optional[datetime] = None
-    ) -> List[ParameterLimitType]:
+    ) -> List['ParameterLimitType']:
         from Resolver.parameterlimit import ParameterLimitResolver
         parentId = [self.id_directoryvalue]
         return await ParameterLimitResolver.getParameterLimits(
@@ -180,7 +180,7 @@ class ParameterDataSourseType:
             self,
             momentChange: Optional[datetime] = None,
             value: Optional[List[int]] = None
-    ) -> List[ParameterValueType]:
+    ) -> List['ParameterValueType']:
         from Resolver.parametervalue import ParameterValueResolver
         parentId = [self.id_parameterdatasourse]
         return await ParameterValueResolver.getParamValues(
@@ -228,7 +228,7 @@ class ParameterType:
             self,
             idDataSourse: Optional[List[int]] = None,
             dataSourseKey: Optional[str] = None
-    ) -> List[ParameterDataSourseType]:
+    ) -> List['ParameterDataSourseType']:
         from Resolver.parameterdatasourse import ParameterDataSourseResolver
         parentId = [self.id_parameter]
         return await ParameterDataSourseResolver.getParamDataSourses(
@@ -245,7 +245,7 @@ class ParameterType:
             maxLimit: Optional[List[int]] = None,
             momentBegin: Optional[datetime] = None,
             momentEnd: Optional[datetime] = None
-    ) -> List[ParameterLimitType]:
+    ) -> List['ParameterLimitType']:
         from Resolver.parameterlimit import ParameterLimitResolver
         parentId = []
         parentId.append(self.id_parameter)
@@ -263,7 +263,7 @@ class ParameterType:
             self,
             momentChange: Optional[datetime] = None,
             value: Optional[List[int]] = None
-    ) -> List[ParameterValueType]:
+    ) -> List['ParameterValueType']:
         from Resolver.parametervalue import ParameterValueResolver
         parentId = [self.id_parameter]
         # Вызываем резолвер. В параметр резолвера передаем ключ от родителя (self.id_parameter)

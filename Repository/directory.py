@@ -31,7 +31,7 @@ class DirectoryRepository:
 
     @staticmethod
     async def create(directory_data: Directory):
-        async with async_db as session:
+        async with async_db() as session:
             async with session.begin():
                 session.add(directory_data)
             await session.commit()
