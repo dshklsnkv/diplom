@@ -28,11 +28,11 @@ class DirectoryValueRepository:
             if longName:
                 query = query.filter(DirectoryValue.long_name.like(longName))
             if shortName:
-                query = query.filter(DirectoryValue.short_name.ilike(shortName))
+                query = query.filter(DirectoryValue.short_name.like(shortName))
             if momentBegin:
-                query = query.filter(DirectoryValue.moment_begin.like(momentBegin))
+                query = query.filter(DirectoryValue.moment_begin == momentBegin)
             if momentEnd:
-                query = query.filter(DirectoryValue.moment_end.like(momentEnd))
+                query = query.filter(DirectoryValue.moment_end == momentEnd)
             result = await session.execute(query)
             return result.scalars().all()
 

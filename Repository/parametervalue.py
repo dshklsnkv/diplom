@@ -20,7 +20,7 @@ class ParameterValueRepository:
             if idParameterDataSourse:
                 query = query.filter(ParameterValue.id_parameterdatasourse.in_(idParameterDataSourse))
             if momentChange:
-                query = query.filter(ParameterValue.moment_change.like(momentChange))
+                query = query.filter(ParameterValue.moment_change == momentChange)
             if value:
                 query = query.filter(ParameterValue.value.in_(value))
             result = await session.execute(query)

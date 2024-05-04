@@ -1,6 +1,7 @@
 from typing import Optional, List
 from schema import ParameterType
 from Service.parameter import ParameterService
+from datetime import datetime
 
 """Класс функций резолверов для Параметров"""
 
@@ -15,7 +16,9 @@ class ParameterResolver:
             idPhysicalType: Optional[List[int]] = None,
             idPlaceIzmer: Optional[List[int]] = None,
             idSredaIzmer: Optional[List[int]] = None,
-            idUnits: Optional[List[int]] = None
+            idUnits: Optional[List[int]] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
     ) -> List[ParameterType]:
         # Получение данных из сервиса
         parameters = await ParameterService.getParameters(
@@ -24,7 +27,9 @@ class ParameterResolver:
             idPhysicalType=idPhysicalType,
             idPlaceIzmer=idPlaceIzmer,
             idSredaIzmer=idSredaIzmer,
-            idUnits=idUnits
+            idUnits=idUnits,
+            momentBegin=momentBegin,
+            momentEnd=momentEnd
         )
         # Преобразование данных сервиса в тип GraphQL
         return [ParameterType(
@@ -35,5 +40,5 @@ class ParameterResolver:
             id_physical_type=parameter.id_physical_type,
             id_place_izmer=parameter.id_place_izmer,
             id_sreda_izmer=parameter.id_sreda_izmer,
-            id_units=parameter.id_units
+            id_units=parameter.id_units,
         ) for parameter in parameters]

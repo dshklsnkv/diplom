@@ -13,13 +13,17 @@ class ParameterDataSourseService:
             idParameterDataSourse: Optional[List[int]] = None,
             idParameter: Optional[List[int]] = None,
             idDataSourse: Optional[List[int]] = None,
-            dataSourseKey: Optional[str] = None
+            dataSourseKey: Optional[str] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
     ):
         return await ParameterDataSourseRepository.getParameterDataSourses(
             idParameterDataSourse,
             idParameter,
             idDataSourse,
-            dataSourseKey
+            dataSourseKey,
+            momentBegin,
+            momentEnd
         )
 
     @staticmethod

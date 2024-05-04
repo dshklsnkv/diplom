@@ -16,7 +16,9 @@ class ParameterService:
             idPhysicalType: Optional[List[int]] = None,
             idPlaceIzmer: Optional[List[int]] = None,
             idSredaIzmer: Optional[List[int]] = None,
-            idUnits: Optional[List[int]] = None
+            idUnits: Optional[List[int]] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
     ):
         # Пока тут просто получение данных через репозиторий
         # В дальнейшем тут может добавиться какая-то дополнительная логика
@@ -26,7 +28,9 @@ class ParameterService:
             idPhysicalType=idPhysicalType,
             idPlaceIzmer=idPlaceIzmer,
             idSredaIzmer=idSredaIzmer,
-            idUnits=idUnits
+            idUnits=idUnits,
+            momentBegin=momentBegin,
+            momentEnd=momentEnd
         )
 
     @staticmethod

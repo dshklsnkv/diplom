@@ -16,7 +16,9 @@ class ParameterDataSourseRepository:
             idParameterDataSourse: Optional[List[int]] = None,
             idParameter: Optional[List[int]] = None,
             idDataSourse: Optional[List[int]] = None,
-            dataSourseKey: Optional[str] = None
+            dataSourseKey: Optional[str] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
     ):
         async with async_db() as session:
             query = select(ParameterDataSourse)
@@ -27,7 +29,11 @@ class ParameterDataSourseRepository:
             if idDataSourse:
                 query = query.filter(ParameterDataSourse.id_data_sourse.in_(idDataSourse))
             if dataSourseKey:
-                query = query.filter(ParameterDataSourse.data_sourse_key.ilike(dataSourseKey))
+                query = query.filter(ParameterDataSourse.data_sourse_key.like(dataSourseKey))
+            if momentBegin:
+                query = query.filter(ParameterDataSourse.moment_begin == momentBegin)
+            if momentEnd:
+                query = query.filter(ParameterDataSourse.moment_end == momentEnd)
             result = await session.execute(query)
             return result.scalars().all()
 

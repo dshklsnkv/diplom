@@ -23,9 +23,9 @@ class DirectoryRepository:
             if nameDirectory:
                 query = query.filter(Directory.name_directory.like(nameDirectory))
             if momentBegin:
-                query = query.filter(Directory.moment_begin.like(momentBegin))
+                query = query.filter(Directory.moment_begin == momentBegin)
             if momentEnd:
-                query = query.filter(Directory.moment_end.like(momentEnd))
+                query = query.filter(Directory.moment_end == momentEnd)
             result = await session.execute(query)
             return result.scalars().all()
 

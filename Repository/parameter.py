@@ -18,7 +18,9 @@ class ParameterRepository:
             idPhysicalType: Optional[List[int]] = None,
             idPlaceIzmer: Optional[List[int]] = None,
             idSredaIzmer: Optional[List[int]] = None,
-            idUnits: Optional[List[int]] = None
+            idUnits: Optional[List[int]] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
     ):
         async with async_db() as session:
             query = select(Parameter)
@@ -38,6 +40,10 @@ class ParameterRepository:
                 query = query.filter(Parameter.id_sreda_izmer.in_(idSredaIzmer))
             if idUnits:
                 query = query.filter(Parameter.id_units.in_(idUnits))
+            if momentBegin:
+                query = query.filter(Parameter.moment_begin == momentBegin)
+            if momentEnd:
+                query = query.filter(Parameter.moment_end == momentEnd)
             result = await session.execute(query)
             return result.scalars().all()
 

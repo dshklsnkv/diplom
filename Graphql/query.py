@@ -50,7 +50,9 @@ class Query:
             idPhysicalType: Optional[List[int]] = None,
             idPlaceIzmer: Optional[List[int]] = None,
             idSredaIzmer: Optional[List[int]] = None,
-            idUnits: Optional[List[int]] = None
+            idUnits: Optional[List[int]] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
     ) -> List[ParameterType]:
         return await ParameterResolver.getParameters(
             idParameter,
@@ -58,7 +60,9 @@ class Query:
             idPhysicalType,
             idPlaceIzmer,
             idSredaIzmer,
-            idUnits
+            idUnits,
+            momentBegin,
+            momentEnd
         )
 
     @strawberry.field(description="Получить списки  параметров")
@@ -67,13 +71,17 @@ class Query:
             idParameterDataSourse: Optional[List[int]] = None,
             idParameter: Optional[List[int]] = None,
             idDataSourse: Optional[List[int]] = None,
-            dataSourseKey: Optional[str] = None
+            dataSourseKey: Optional[str] = None,
+            momentBegin: Optional[datetime] = None,
+            momentEnd: Optional[datetime] = None
     ) -> List[ParameterDataSourseType]:
         return await ParameterDataSourseResolver.getParamDataSourses(
             idParameterDataSourse,
             idParameter,
             idDataSourse,
-            dataSourseKey
+            dataSourseKey,
+            momentBegin,
+            momentEnd
         )
 
     @strawberry.field(description="Получить списки значений параметров")

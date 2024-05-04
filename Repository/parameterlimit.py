@@ -32,9 +32,9 @@ class ParameterLimitRepository:
             if maxLimit:
                 query = query.filter(ParameterLimit.max_limit.in_(maxLimit))
             if momentBegin:
-                query = query.filter(ParameterLimit.moment_begin.like(momentBegin))
+                query = query.filter(ParameterLimit.moment_begin == momentBegin)
             if momentEnd:
-                query = query.filter(ParameterLimit.moment_end.like(momentEnd))
+                query = query.filter(ParameterLimit.moment_end == momentEnd)
             result = await session.execute(query)
             return result.scalars().all()
 
