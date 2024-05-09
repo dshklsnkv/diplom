@@ -7,10 +7,10 @@ import strawberry
 @strawberry.type
 class ParameterLimitType:
     id_parameterlimit: Optional[int]
-    id_parameter: int
-    id_limit_type: int
-    min_limit: int
-    max_limit: int
+    id_parameter: Optional[int]
+    id_limit_type: Optional[int]
+    min_limit: Optional[int]
+    max_limit: Optional[int]
     moment_begin: datetime
     moment_end: datetime
 
@@ -24,7 +24,7 @@ class ParameterLimitType:
             momentEnd: Optional[datetime] = None
     ) -> List['DirectoryValueType']:
         from Resolver.directoryvalue import DirectoryValueResolver
-        parentId = [self.id_parameterlimit]
+        parentId = [self.id_limit_type]
         return await DirectoryValueResolver.getDirectoryValues(
             idDirectoryValue=parentId,
             idDirectory=idDirectory,
@@ -148,7 +148,7 @@ class ParameterValueType:
 
 @strawberry.type
 class ParameterDataSourseType:
-    id_parameterdatasourse: Optional[int]
+    id_parameterdatasourse: Optional[float]
     id_parameter: int
     id_data_sourse: int
     data_sourse_key: str
@@ -165,7 +165,7 @@ class ParameterDataSourseType:
             momentEnd: Optional[datetime] = None
     ) -> List['DirectoryValueType']:
         from Resolver.directoryvalue import DirectoryValueResolver
-        parentId = [self.id_parameterdatasourse]
+        parentId = [self.id_data_sourse]
         return await DirectoryValueResolver.getDirectoryValues(
             idDirectoryValue=parentId,
             idDirectory=idDirectory,
