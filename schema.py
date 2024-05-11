@@ -273,6 +273,70 @@ class ParameterType:
             value=value
         )
 
+    @strawberry.field
+    async def PhysicalType(self,
+                           idDirectory: Optional[List[int]] = None,
+                           longName: Optional[str] = None,
+                           shortName: Optional[str] = None, ) -> List['DirectoryValueType']:
+        from Resolver.directoryvalue import DirectoryValueResolver
+        parentId = [self.id_physical_type]
+        return await DirectoryValueResolver.getDirectoryValues(
+            idDirectoryValue=parentId,
+            idDirectory=idDirectory,
+            longName=longName,
+            shortName=shortName,
+            # momentBegin=momentBegin,
+            # momentEnd=momentEnd
+        )
+
+    @strawberry.field
+    async def Place_izmer(self,
+                          idDirectory: Optional[List[int]] = None,
+                          longName: Optional[str] = None,
+                          shortName: Optional[str] = None, ) -> List['DirectoryValueType']:
+        from Resolver.directoryvalue import DirectoryValueResolver
+        parentId = [self.id_place_izmer]
+        return await DirectoryValueResolver.getDirectoryValues(
+            idDirectoryValue=parentId,
+            idDirectory=idDirectory,
+            longName=longName,
+            shortName=shortName,
+            # momentBegin=momentBegin,
+            # momentEnd=momentEnd
+        )
+
+    @strawberry.field
+    async def Sreda_izmer(self,
+                          idDirectory: Optional[List[int]] = None,
+                          longName: Optional[str] = None,
+                          shortName: Optional[str] = None, ) -> List['DirectoryValueType']:
+        from Resolver.directoryvalue import DirectoryValueResolver
+        parentId = [self.id_sreda_izmer]
+        return await DirectoryValueResolver.getDirectoryValues(
+            idDirectoryValue=parentId,
+            idDirectory=idDirectory,
+            longName=longName,
+            shortName=shortName,
+            # momentBegin=momentBegin,
+            # momentEnd=momentEnd
+        )
+
+    @strawberry.field
+    async def Units(self,
+                    idDirectory: Optional[List[int]] = None,
+                    longName: Optional[str] = None,
+                    shortName: Optional[str] = None, ) -> List['DirectoryValueType']:
+        from Resolver.directoryvalue import DirectoryValueResolver
+        parentId = [self.id_units]
+        return await DirectoryValueResolver.getDirectoryValues(
+            idDirectoryValue=parentId,
+            idDirectory=idDirectory,
+            longName=longName,
+            shortName=shortName,
+            # momentBegin=momentBegin,
+            # momentEnd=momentEnd
+        )
+
 
 @strawberry.input
 class ParameterInput:
