@@ -25,5 +25,6 @@ class DirectoryResolver:
         return [DirectoryType(
             id_directory=directory.id_directory,
             name_directory=directory.name_directory,
-            moment_begin=directory.moment_begin, moment_end=directory.moment_end
+            moment_begin=directory.moment_begin,
+            moment_end=directory.moment_end
         ) for directory in directorys]

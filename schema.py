@@ -54,6 +54,34 @@ class ParameterLimitType:
             idUnits=idUnits
         )
 
+    @strawberry.field
+    async def Limit_type(self,
+                         idDirectory: Optional[List[int]] = None,
+                         longName: Optional[str] = None,
+                         shortName: Optional[str] = None, ) -> List['DirectoryValueType']:
+        from Resolver.directoryvalue import DirectoryValueResolver
+        parentId = [self.id_limit_type]
+        return await DirectoryValueResolver.getDirectoryValues(
+            idDirectoryValue=parentId,
+            idDirectory=idDirectory,
+            longName=longName,
+            shortName=shortName,
+            # momentBegin=momentBegin,
+            # momentEnd=momentEnd
+        )
+
+    @strawberry.field
+    async def Parameter_name(
+            self,
+            nameParameter: Optional[str] = None,
+    ) -> List['ParameterType']:
+        from Resolver.parameter import ParameterResolver
+        parentId = [self.id_parameter]
+        return await ParameterResolver.getParameters(
+            idParameter=parentId,
+            nameParameter=nameParameter,
+        )
+
 
 @strawberry.type
 class DirectoryValueType:
@@ -99,6 +127,18 @@ class DirectoryValueType:
             idParameter=idParameter,
             idDataSourse=idDataSourse,
             dataSourseKey=dataSourseKey
+        )
+
+    @strawberry.field
+    async def Directory_name(
+            self,
+            nameDirectory: Optional[str] = None
+    ) -> List['DirectoryType']:
+        from Resolver.directory import DirectoryResolver
+        parentId = [self.id_directory]
+        return await DirectoryResolver.getDirectorys(
+            idDirectory=parentId,
+            nameDirectory=nameDirectory
         )
 
 
@@ -207,6 +247,34 @@ class ParameterDataSourseType:
             idPlaceIzmer=idPlaceIzmer,
             idSredaIzmer=idSredaIzmer,
             idUnits=idUnits
+        )
+
+    @strawberry.field
+    async def Parameter_name(
+            self,
+            nameParameter: Optional[str] = None,
+    ) -> List['ParameterType']:
+        from Resolver.parameter import ParameterResolver
+        parentId = [self.id_parameter]
+        return await ParameterResolver.getParameters(
+            idParameter=parentId,
+            nameParameter=nameParameter,
+        )
+
+    @strawberry.field
+    async def Istochnik(self,
+                        idDirectory: Optional[List[int]] = None,
+                        longName: Optional[str] = None,
+                        shortName: Optional[str] = None, ) -> List['DirectoryValueType']:
+        from Resolver.directoryvalue import DirectoryValueResolver
+        parentId = [self.id_data_sourse]
+        return await DirectoryValueResolver.getDirectoryValues(
+            idDirectoryValue=parentId,
+            idDirectory=idDirectory,
+            longName=longName,
+            shortName=shortName,
+            # momentBegin=momentBegin,
+            # momentEnd=momentEnd
         )
 
 
